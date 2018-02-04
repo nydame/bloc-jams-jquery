@@ -1,7 +1,8 @@
 {
     // Implement Play/Pause button
     $('button#play-pause').on('click', function() {
-        player.playPause();
+        // player.playPause();
+        helper.playPauseAndUpdate();
         $(this).attr('playState', player.playState);
     });
     // Implement Next button
@@ -15,7 +16,8 @@
                 ? currentSongIndex + 1
                 : null;
         if (nextSongIndex) {
-            player.playPause(album.songs[nextSongIndex]);
+            // player.playPause(album.songs[nextSongIndex]);
+            helper.playPauseAndUpdate(album.songs[nextSongIndex]);
         }
     });
     // Impelment Previous button
@@ -27,7 +29,8 @@
         const previousSongIndex =
             currentSongIndex > 0 ? currentSongIndex - 1 : null;
         if (previousSongIndex || previousSongIndex === 0) {
-            player.playPause(album.songs[previousSongIndex]);
+            // player.playPause(album.songs[previousSongIndex]);
+            helper.playPauseAndUpdate(album.songs[previousSongIndex]);
         }
     });
     // Display time, updating once per second
@@ -41,11 +44,14 @@
         // move slider to reflect where we are in the song
         $('#time-control input').val(percent);
         // display that information as time
-        $('#time-control .current-time').text(currentTime);
-        // display the total running time of the song
+        $('#time-control .current-time').text(player.prettyTime(currentTime));
     }, 1000);
     // Respond to time control slider by skipping to desired point in the song
     $('#time-control input').on('input', function(ev) {
         player.skipTo(ev.target.value);
+    });
+    // Respond to volume control slider by changing to desired volume
+    $('#volume-control input').on('change', function(ev) {
+        player.setVolume(ev.target.value);
     });
 }
